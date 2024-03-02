@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.StudentMapper">
+    <select id="findBySearch" resultType="com.example.pojo.entity.Student">
+        SELECT student.*,user.phone from student
+        LEFT JOIN user
+        ON student.user_id = user.id
+        <where>
+            <if test="name != null and name != ''">
+                and student.username like concat('%',#{name},'%')
+            </if>
+        </where>
+    </select>
+</mapper>

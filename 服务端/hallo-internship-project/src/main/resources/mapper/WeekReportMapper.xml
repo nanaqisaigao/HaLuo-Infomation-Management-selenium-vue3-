@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.WeekReportMapper">
+    <update id="update">
+        update weekreport
+        <set>
+            <if test="thisWeekWork != null and thisWeekWork !=''">
+                this_week_work = #{thisWeekWork},
+            </if>
+            <if test="finished != null and finished !=''">
+                finished = #{finished},
+            </if>
+            <if test="thisWeekIdea != null and thisWeekIdea !=''">
+                this_week_idea = #{thisWeekIdea},
+            </if>
+            <if test="nextWeekWork != null and nextWeekWork !=''">
+                next_week_work = #{nextWeekWork}
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <select id="findBySearch" resultType="com.example.pojo.entity.WeekReport">
+        SELECT weekreport.*,student.username from weekreport
+        LEFT JOIN student
+        ON weekreport.student_id = student.id
+        <where>
+            <if test="userid != null and userid != ''">
+                and weekreport.student_id = #{userid}
+            </if>
+            <if test="startTime != null">
+                and weekreport.start_time <![CDATA[ >= ]]> #{startTime}
+            </if>
+            <if test="endTime != null " >
+                and weekreport.end_time <![CDATA[ <= ]]> #{endTime}
+            </if>
+            <if test="name != null and name != ''">
+                and student.username like concat('%',#{name},'%')
+            </if>
+        </where>
+
+    </select>
+</mapper>
